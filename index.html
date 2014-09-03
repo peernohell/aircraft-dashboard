@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>Auto control aircraft dashboard</title>
+    <!-- bower:css -->
+    <!-- endbower -->
+		<link type="text/css" href="dashboard.css" rel="stylesheet">
+  </head>
+  <body ng-app="AircraftDashboard">
+    <div id="aircraft-dashboard" class="dashboard">
+			<div class="gauge">
+				<div class="speed" ng-controller="SpeedCtrl">
+					<div class="count-needles">
+            <div class="needle-big" style="transform: rotate({{speed.current | speedNeedle}}deg);"></div>
+						<div class="counter split" ng-bind="speed.current"></div>
+					</div>
+					<div class="stats">
+            <div class="min" ng-bind="speed.min"></div>
+						<div class="max" ng-bind="speed.max"></div>
+						<div class="avg" ng-bind="speed.avg"></div>
+					</div>
+				</div>	
+				<div class="altitude" ng-controller="AltitudeCtrl">
+					<div class="count-needles">
+						<div class="needle-big"></div>
+						<div class="needle-small"></div>
+						<div class="counter" ng-bind="altitude.current"></div>
+					</div>
+					<div class="stats">
+						<div class="min" ng-bind="altitude.min"></div>
+						<div class="max" ng-bind="altitude.max"></div>
+						<div class="avg" ng-bind="altitude.avg"></div>
+					</div>
+				</div>
+			</div>
+			<div class="landing-box" ng-controller="LandingGearCtrl">
+        <div class="landing-gear-button {{landingGear | landingGearCss}}"></div>
+			</div>
+			<div class="flaps-box" ng-controller="FlapsCtrl">
+				<div class="flaps {{flaps | flapsCss}}"></div>
+			</div>
+			<div class="connection-box" ng-controller="ConnectionCtrl">
+        <div class="connection {{connection | connectionCss}}" ng-bind="connection"></div>
+			</div>
+		</div>
+  </body>
+  <!-- bower:js -->
+  <!-- endbower -->
+	<script type="text/javascript" src="js/app.min.js"></script>
+
+</html>
