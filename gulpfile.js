@@ -4,7 +4,7 @@ gulp = require('gulp'),
 karma = require('karma').server,
 concat = require('gulp-concat'),
 uglify = require('gulp-uglifyjs'),
-webserver = require('gulp-webserver'),
+webserver = require('./server'),
 bower = require('gulp-bower'),
 ngAnnotate = require('gulp-ng-annotate'),
 wiredep = require('wiredep').stream,
@@ -71,12 +71,8 @@ gulp.task('css', function() {
     .pipe(gulp.dest('./build/'));
 });
 
-gulp.task('webserver', function() {
-  return gulp.src('./build')
-  .pipe(webserver({
-    livereload: true,
-    open: '/index.html' 
-  }));
+gulp.task('webserver', function(cb) {
+  webserver(cb);
 });
 
 gulp.task('watch', function() {
