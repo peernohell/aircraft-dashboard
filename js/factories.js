@@ -16,7 +16,7 @@ angular
         this.max = value;
         this.avg = value;
         return;
-      } 
+      }
 
       this.current = value;
       if (this.min > value) {
@@ -33,27 +33,79 @@ angular
   }
   return StateValue;
 })
-.factory('AircraftService', function AircraftService (StateValue) {
+.factory('AircraftData', function () {
+
+	function AircaftWebSocketData () {
+		this.socket = io();
+		console.log('create a new socket io connection');
+		this.socket.on('telemetry', this.update.bind(this));
+		this.socket.on('telemetry', function () {
+			console.log('telemetry sended', arguments);
+		});
+		this.events('speed', 'altitude');
+	}
+
+	AircaftWebSocketData.prototype = {
+		events: function () {
+			[].forEach.call(arguments, function (evt) {
+				this.events[evt] = [];
+			}.bind(this));
+		},
+		sendEvents: function (evt) {
+			var args = [].slice.call(arguments, 1);
+			if (!(evt in this.events)) {
+				throw new Error('unknown event ' + evt);
+			}
+			this.events[evt].forEach(function (fn) {
+				fn.call(null, args);
+			});
+		},
+		on: function (evt, fn) {
+			if (!(evt in this.events)) {
+				throw new Error('unknown event ' + evt);
+			}
+			this.events[evt].push(fn);
+		},
+		update: function (data) {
+			var
+			key,
+			keys = Objects.keys(data);
+
+			console.log('update', data);
+			if (keys.length > 1) {
+				throw new Error('udpate data must have only one attribute!');
+			}
+			key = keys[0];
+			if (!(key in this.events)) {
+				console.log('server send an unmanaged value: ' + key);
+				return;
+			}
+			this.sendEvents(key, data[key]);
+		}
+	};
+
+	return new AircaftWebSocketData();
+
+})
+.factory('AircraftService', function AircraftService (StateValue, AircraftData) {
 	var AircraftServiceSingleton = {
 		speed: new StateValue(),
 		altitude: new StateValue(),
     landingGear: false,
     flaps: 3,
-    connection: 'Connected' 
+    connection: 'Disconnected'
 	};
 
-  AircraftServiceSingleton.speed.set(340);
-  AircraftServiceSingleton.speed.set(240);
-  AircraftServiceSingleton.speed.set(300);
-  AircraftServiceSingleton.speed.set(440);
-  AircraftServiceSingleton.speed.set(34);
+	AircraftData.on('altitude', function (altitude) {
+		console.log('new altitude: ', altitude);
+		AircraftServiceSingleton.altitude.set(altitude);
+	});
 
-  AircraftServiceSingleton.altitude.set(3400);
-  AircraftServiceSingleton.altitude.set(2400);
-  AircraftServiceSingleton.altitude.set(3000);
-  AircraftServiceSingleton.altitude.set(4400);
-  AircraftServiceSingleton.altitude.set(1300);
-	
+	AircraftData.on('speed', function (speed) {
+		console.log('new speed: ', speed);
+		AircraftServiceSingleton.speed.set(speed);
+	});
+
   return AircraftServiceSingleton;
 });
 

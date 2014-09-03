@@ -19,4 +19,3 @@ angular
 .controller('AltitudeCtrl', function ($scope, AircraftService) {
   $scope.altitude = AircraftService.altitude;
 });
-
