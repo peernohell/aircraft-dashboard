@@ -2,7 +2,7 @@ angular
 .module('AircraftDashboard', [])
 
 .controller('SpeedCtrl', function ($scope, AircraftService) {
-    $scope.speed = AircraftService.speed;
+    $scope.AircraftService = AircraftService;
 })
 
 .controller('LandingGearCtrl', function ($scope, AircraftService) {

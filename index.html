@@ -10,13 +10,13 @@
 			<div class="gauge">
 				<div class="speed" ng-controller="SpeedCtrl">
 					<div class="count-needles">
-            <div class="needle-big" style="transform: rotate({{speed.current | speedNeedle}}deg);"></div>
-						<div class="counter split" ng-bind="speed.current"></div>
+            <div class="needle-big" style="transform: rotate({{AircraftService.speed.current | speedNeedle}}deg);"></div>
+						<div class="counter split" ng-bind="AircraftService.speed.current"></div>
 					</div>
 					<div class="stats">
-            <div class="min" ng-bind="speed.min"></div>
-						<div class="max" ng-bind="speed.max"></div>
-						<div class="avg" ng-bind="speed.avg"></div>
+            <div class="min" ng-bind="AircraftService.speed.min"></div>
+						<div class="max" ng-bind="AircraftService.speed.max"></div>
+						<div class="avg" ng-bind="AircraftService.speed.avg"></div>
 					</div>
 				</div>
 				<div class="altitude" ng-controller="AltitudeCtrl">
@@ -46,6 +46,15 @@
   <!-- bower:js -->
   <!-- endbower -->
   <script src="/socket.io/socket.io.js"></script>
+  <!--
 	<script type="text/javascript" src="js/app.min.js"></script>
+  -->
+	<script type="text/javascript" src="js/controllers.js"></script>
+	<script type="text/javascript" src="js/filters.js"></script>
+	<script type="text/javascript" src="js/factories.js"></script>
+	<script type="text/javascript" src="js/services.js"></script>
+  -->
+  -->
+  -->
 
 </html>

@@ -29,8 +29,7 @@ actions = [function altitude () {
 	console.log('send flaps ' + flaps);
 	io.emit('telemetry', {"flaps": flaps});
 }, function disconnect () {
-	console.log('send disconnect ');
-	// todo.
+	console.log('TODO send disconnect ');
 }];
 
 

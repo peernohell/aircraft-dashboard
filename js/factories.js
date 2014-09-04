@@ -38,11 +38,12 @@ angular
 	function AircaftWebSocketData () {
 		this.socket = io();
 		console.log('create a new socket io connection');
-		this.socket.on('telemetry', this.update.bind(this));
-		this.socket.on('telemetry', function () {
-			console.log('telemetry sended', arguments);
-		});
-		this.events('speed', 'altitude');
+		this.socket.on('telemetry', function (data) {
+      console.log('socket telemetry before update');
+      this.update(data);
+    }.bind(this));
+
+		this.events('airspeed', 'altitude', 'flaps');
 	}
 
 	AircaftWebSocketData.prototype = {
@@ -69,7 +70,7 @@ angular
 		update: function (data) {
 			var
 			key,
-			keys = Objects.keys(data);
+			keys = Object.keys(data);
 
 			console.log('update', data);
 			if (keys.length > 1) {
@@ -92,7 +93,7 @@ angular
 		speed: new StateValue(),
 		altitude: new StateValue(),
     landingGear: false,
-    flaps: 3,
+    flaps: 0,
     connection: 'Disconnected'
 	};
 
@@ -101,10 +102,17 @@ angular
 		AircraftServiceSingleton.altitude.set(altitude);
 	});
 
-	AircraftData.on('speed', function (speed) {
+  /*
+	AircraftData.on('airspeed', function (speed) {
 		console.log('new speed: ', speed);
 		AircraftServiceSingleton.speed.set(speed);
 	});
+  */
+  setInterval(function () {
+	  var speed = Math.random() * 500 | 0;
+    console.log('update speed by interval to ', speed);
+		AircraftServiceSingleton.speed.set(speed);
+  }, 2000);
 
   return AircraftServiceSingleton;
 });

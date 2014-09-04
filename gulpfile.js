@@ -50,9 +50,11 @@ gulp.task('html', function () {
 gulp.task('scripts', function() {
   return gulp.src(paths.scripts)
     .pipe(ngAnnotate())
+    /*
     .pipe(uglify('app.min.js', {
       outSourceMap: true
     }))
+    //*/
     .pipe(gulp.dest('./build/js'));
 });
 
