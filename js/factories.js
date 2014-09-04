@@ -33,14 +33,13 @@ angular
   }
   return StateValue;
 })
-.factory('AircraftData', function () {
+.factory('AircraftData', function ($rootScope) {
 
 	function AircaftWebSocketData () {
 		this.socket = io();
-		console.log('create a new socket io connection');
+
 		this.socket.on('telemetry', function (data) {
-      console.log('socket telemetry before update');
-      this.update(data);
+			$rootScope.$apply(this.update.bind(this, data))
     }.bind(this));
 
 		this.events('airspeed', 'altitude', 'flaps');
@@ -58,7 +57,7 @@ angular
 				throw new Error('unknown event ' + evt);
 			}
 			this.events[evt].forEach(function (fn) {
-				fn.call(null, args);
+				fn.apply(null, args);
 			});
 		},
 		on: function (evt, fn) {
@@ -98,21 +97,12 @@ angular
 	};
 
 	AircraftData.on('altitude', function (altitude) {
-		console.log('new altitude: ', altitude);
 		AircraftServiceSingleton.altitude.set(altitude);
 	});
 
-  /*
 	AircraftData.on('airspeed', function (speed) {
-		console.log('new speed: ', speed);
 		AircraftServiceSingleton.speed.set(speed);
 	});
-  */
-  setInterval(function () {
-	  var speed = Math.random() * 500 | 0;
-    console.log('update speed by interval to ', speed);
-		AircraftServiceSingleton.speed.set(speed);
-  }, 2000);
 
   return AircraftServiceSingleton;
 });
