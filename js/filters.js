@@ -25,5 +25,20 @@ angular
   return function speedNeedle (speed) {
    return speed / 50 * 36;
   };
+})
+.filter('altitudeThousandNeedle', function () {
+  return function altitudeThousandNeedle (altitude) {
+   return altitude/1000 * 36;
+  };
+})
+.filter('altitudeHundredNeedle', function () {
+  return function altitudeHundredNeedle (altitude) {
+   return (altitude/100 % 10) * 36;
+  };
+})
+.filter('round', function () {
+  return function round (value, decimals) {
+    return isNaN(value) ? 0 : Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  }; 
 });
 

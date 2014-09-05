@@ -36,16 +36,41 @@ angular
 .factory('AircraftData', function ($rootScope) {
 
 	function AircaftWebSocketData () {
-		this.socket = io();
+    setTimeout(function () {
+      // wait to avoid controller or service not to be attache on event on connection
+		  this.socket = io();
 
-		this.socket.on('telemetry', function (data) {
-			$rootScope.$apply(this.update.bind(this, data))
-    }.bind(this));
+      this.socket.on('connect', function () {
+        this.update({connection: 'Connected'});
+      }.bind(this));
 
-		this.events('airspeed', 'altitude', 'flaps');
+      this.socket.on('disconnect', function () {
+        this.update({connection: 'Disconnected'});
+      }.bind(this));
+
+      this.socket.on('reconnecting', function () {
+        this.update({connection: 'Connecting'});
+      }.bind(this));
+
+      this.socket.on('telemetry', function (data) {
+        $rootScope.$apply(this.update.bind(this, data))
+      }.bind(this));
+
+    }.bind(this), 200);
+
+
+
+		this.events('airspeed', 'altitude', 'flaps', 'connection');
 	}
 
 	AircaftWebSocketData.prototype = {
+    setLandingGear: function (landingGear) {
+      console.log('send control');
+      this.socket.emit('control', {
+        type: 'landing_gear', 
+        value: landingGear
+      });
+    },
 		events: function () {
 			[].forEach.call(arguments, function (evt) {
 				this.events[evt] = [];
@@ -93,15 +118,27 @@ angular
 		altitude: new StateValue(),
     landingGear: false,
     flaps: 0,
-    connection: 'Disconnected'
+    connection: 'Disconnected',
+    toggleLandingGear: function () {
+      console.log('server toggle');
+      AircraftData.setLandingGear(this.landingGear ? 0 : 1);
+    }
 	};
 
 	AircraftData.on('altitude', function (altitude) {
 		AircraftServiceSingleton.altitude.set(altitude);
 	});
 
-	AircraftData.on('airspeed', function (speed) {
-		AircraftServiceSingleton.speed.set(speed);
+	AircraftData.on('airspeed', function (airspeed) {
+		AircraftServiceSingleton.speed.set(airspeed);
+	});
+
+	AircraftData.on('flaps', function (flaps) {
+		AircraftServiceSingleton.flaps = flaps;
+	});
+
+	AircraftData.on('connection', function (connection) {
+		AircraftServiceSingleton.connection = connection;
 	});
 
   return AircraftServiceSingleton;

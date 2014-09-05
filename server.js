@@ -28,6 +28,12 @@ actions = [function altitude () {
 	var flaps = Math.random() * 6 | 0;
 	console.log('send flaps ' + flaps);
 	io.emit('telemetry', {"flaps": flaps});
+
+}, function gears () {
+	var gear = Math.random() * 3 | 0;
+	console.log('send landing gear ' + gear);
+	io.emit('telemetry', {"gear": gear});
+
 }, function disconnect () {
 	console.log('TODO send disconnect ');
 }];
@@ -44,11 +50,22 @@ function sendAction() {
   setTimeout(sendAction, nextAction);
 }
 
+function serverCallback (cb) {
+  return function () {
+    io.on('connection', function (socket) {
+      socket.on('control', function (data) {
+        console.log('control', data);
+      });
+    });
+    sendAction();
+
+    cb();
+  };
+}
+
 if (module) {
   module.exports = function (cb) {
-    server.listen(3000, function () {
-			sendAction();
-		});
+    server.listen(3000, serverCallback(cb));
   };
 } else {
     server.listen(3000);

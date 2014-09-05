@@ -11,35 +11,35 @@
 				<div class="speed" ng-controller="SpeedCtrl">
 					<div class="count-needles">
             <div class="needle-big" style="transform: rotate({{speed.current | speedNeedle}}deg);"></div>
-						<div class="counter split" ng-bind="speed.current"></div>
+						<div class="counter split" ng-bind="speed.current | round:2"></div>
 					</div>
 					<div class="stats">
-            <div class="min" ng-bind="speed.min"></div>
-						<div class="max" ng-bind="speed.max"></div>
-						<div class="avg" ng-bind="speed.avg"></div>
+            <div class="min" ng-bind="speed.min | round:2"></div>
+						<div class="max" ng-bind="speed.max | round:2"></div>
+						<div class="avg" ng-bind="speed.avg | round:2"></div>
 					</div>
 				</div>
 				<div class="altitude" ng-controller="AltitudeCtrl">
 					<div class="count-needles">
-						<div class="needle-big"></div>
-						<div class="needle-small"></div>
-						<div class="counter" ng-bind="altitude.current"></div>
+						<div class="needle-big" style="transform: rotate({{altitude.current | altitudeHundredNeedle}}deg);"></div>
+						<div class="needle-small" style="transform: rotate({{altitude.current | altitudeThousandNeedle}}deg);"></div>
+						<div class="counter" ng-bind="altitude.current | round:2"></div>
 					</div>
 					<div class="stats">
-						<div class="min" ng-bind="altitude.min"></div>
-						<div class="max" ng-bind="altitude.max"></div>
-						<div class="avg" ng-bind="altitude.avg"></div>
+						<div class="min" ng-bind="altitude.min | round:2"></div>
+						<div class="max" ng-bind="altitude.max | round:2"></div>
+						<div class="avg" ng-bind="altitude.avg | round:2"></div>
 					</div>
 				</div>
 			</div>
 			<div class="landing-box" ng-controller="LandingGearCtrl">
-        <div class="landing-gear-button {{landingGear | landingGearCss}}"></div>
+        <div class="landing-gear-button {{data.landingGear | landingGearCss}}" ng-click="toggleLandingGear()"></div>
 			</div>
 			<div class="flaps-box" ng-controller="FlapsCtrl">
-				<div class="flaps {{flaps | flapsCss}}"></div>
+				<div class="flaps {{data.flaps | flapsCss}}"></div>
 			</div>
 			<div class="connection-box" ng-controller="ConnectionCtrl">
-        <div class="connection {{connection | connectionCss}}" ng-bind="connection"></div>
+        <div class="connection {{data.connection | connectionCss}}" ng-bind="data.connection"></div>
 			</div>
 		</div>
   </body>

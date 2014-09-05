@@ -6,15 +6,19 @@ angular
 })
 
 .controller('LandingGearCtrl', function ($scope, AircraftService) {
-    $scope.landingGear = AircraftService.landingGear;
+    $scope.data = AircraftService;
+    $scope.toggleLandingGear = function () {
+      console.log('controler toggle');
+      AircraftService.toggleLandingGear();
+    };
 })
 
 .controller('FlapsCtrl', function ($scope, AircraftService) {
-  $scope.flaps = AircraftService.flaps;
+  $scope.data =  AircraftService;
 })
 
 .controller('ConnectionCtrl', function ($scope, AircraftService) {
-  $scope.connection = AircraftService.connection;
+  $scope.data = AircraftService;
 })
 
 .controller('AltitudeCtrl', function ($scope, AircraftService) {
