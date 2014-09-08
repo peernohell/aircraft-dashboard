@@ -1,13 +1,14 @@
 angular
 .module('aircraft.factory', ['aircraft.connection'])
 .config(['DataConnectionProvider', function (ConnectionProvider) {
-  
-    ConnectionProvider.setDataConnectionName('WebsocketDataConnection');
-    /*
-    ConnectionProvider.setDataConnectionConfiguration({
-      url: 'localhost'
-    });
-    */
+	var config = {url: 'http://localhost:3000'};
+
+	ConnectionProvider.setDataConnectionName('WebsocketDataConnection');
+	if (location.host !== 'localhost') {
+		config.url = 'http://176.34.94.213:8888/telemetry';
+	}
+
+	ConnectionProvider.setDataConnectionConfiguration(config);
 
 }])
 .factory('StateValue', function () {
@@ -64,7 +65,7 @@ angular
 	});
 
 	ConnectionProvider.on('landinggear', function (landinggear) {
-		AircraftServiceSingleton.altitude.set(!!landinggear);
+		AircraftServiceSingleton.landingGear = !!landinggear;
 	});
 
 	ConnectionProvider.on('flaps', function (flaps) {

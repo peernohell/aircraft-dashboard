@@ -19,17 +19,17 @@ angular
 		},
 		sendEvents: function (evt) {
 			var args = [].slice.call(arguments, 1);
-			if (!(evt in this.events)) {
+			if (!(evt in this.events))
 				throw new Error('unknown event ' + evt);
-			}
+
 			this.events[evt].forEach(function (fn) {
 				fn.apply(null, args);
 			});
 		},
 		on: function (evt, fn) {
-			if (!(evt in this.events)) {
+			if (!(evt in this.events))
 				throw new Error('unknown event ' + evt);
-			}
+
 			this.events[evt].push(fn);
 		},
   };
@@ -39,7 +39,7 @@ angular
   return AbstractDataConnection;
 })
 .factory('WebsocketDataConnection', function ($rootScope, AbstractDataConnection) {
-    
+
   // a hash that associate socketio event to connection state
   var socketioToConnectionStates = {
     connect: 'Connected',
@@ -52,10 +52,11 @@ angular
    * the url to the websocket server.
    *
    * @params {Object} config An object with configuration option
-   * @params {String} config.host the websocket server host 
-   * @params {String} config.port the websocket server port 
+   * @params {String} config.host the websocket server host
+   * @params {String} config.port the websocket server port
    */
 	function WebsocketDataConnection (config) {
+		angular.extend(this, config);
     this.initEvents();
 	}
 
@@ -63,7 +64,11 @@ angular
     // init connection
     init: function () {
 
-      this.socket = io();
+      console.log('websocket on: ', this.url);
+      this.socket = io(this.url);
+
+      // websocket is open. update state to connecting
+      this.update({connection: 'Connecting'});
 
       // attache socketio event to update connection state.
       Object.keys(socketioToConnectionStates).forEach(function (socketioEvent) {
@@ -82,7 +87,7 @@ angular
     setLandingGear: function (landingGear) {
       console.log('send control');
       this.socket.emit('control', {
-        type: 'landing_gear', 
+        type: 'landing_gear',
         value: landingGear
       });
     },
@@ -105,7 +110,7 @@ angular
     onConnection: function (connectionState) {
       $rootScope.$apply(this.update.bind(this, {connection: connectionState}));
     }
-	};
+  };
   angular.extend(WebsocketDataConnection.prototype, AbstractDataConnection);
 
 	return WebsocketDataConnection;
@@ -128,7 +133,8 @@ angular
       throw new Error('DataConnectionProvider: you must configure the DataConnection to use (ex: WebsocketDataConnection)');
 
     var DataConnection = $injector.get(dataConnectionName);
-    return new DataConnection();
+		console.log('create', dataConnectionName, dataConnectionConfiguration);
+    return new DataConnection(dataConnectionConfiguration);
   }];
 
 });
