@@ -17,22 +17,22 @@ var emitmsg = false;
 actions = [function altitude () {
 	var altitude = Math.random() * 30000 | 0;
 	console.log('send altitude ' + altitude);
-	io.emit('telemetry', {"altitude": altitude});
+	io.emit('telemetry', {altitude: altitude});
 
 }, function speed () {
 	var speed = Math.random() * 500 | 0;
 	console.log('send speed ' + speed);
-	io.emit('telemetry', {"airspeed": speed});
+	io.emit('telemetry', {airspeed: speed});
 
 }, function flaps () {
 	var flaps = Math.random() * 6 | 0;
 	console.log('send flaps ' + flaps);
-	io.emit('telemetry', {"flaps": flaps});
+	io.emit('telemetry', {flaps: flaps});
 
 }, function gears () {
 	var gear = Math.random() * 3 | 0;
 	console.log('send landing gear ' + gear);
-	io.emit('telemetry', {"gear": gear});
+	io.emit('telemetry', {landinggear: gear});
 
 }, function disconnect () {
 	console.log('TODO send disconnect ');
