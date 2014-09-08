@@ -28,6 +28,7 @@
     "gulp-uglifyjs": "^0.4.2",
     "gulp-webserver": "^0.7.0",
     "karma-chai": "^0.1.0",
+    "karma-sinon-chai": "^0.2.0",
     "mocha": "^1.21.4",
     "run-sequence": "^0.3.6",
     "wiredep": "^1.8.5"

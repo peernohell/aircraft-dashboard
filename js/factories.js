@@ -1,5 +1,7 @@
 angular
-.module('aircraft.factory', ['aircraft.connection'])
+.module('aircraft.factories', [
+  'aircraft.connection',
+  'aircraft.stateValue'])
 .config(['DataConnectionProvider', function (ConnectionProvider) {
 	var config = {url: 'http://localhost:3000'};
 
@@ -11,42 +13,11 @@ angular
 	ConnectionProvider.setDataConnectionConfiguration(config);
 
 }])
-.factory('StateValue', function () {
-  function StateValue () {
-    var _nbValueSetted = 0;
-
-    this.set = (function (value) {
-      _nbValueSetted++;
-
-      if (!('current' in this)) {
-        // it's the first value so we set all attribute
-        this.current = value;
-        this.min = value;
-        this.max = value;
-        this.avg = value;
-        return;
-      }
-
-      this.current = value;
-      if (this.min > value) {
-        this.min = value;
-      }
-
-      if (this.max < value) {
-        this.max = value;
-      }
-
-      this.avg = (this.avg * (_nbValueSetted - 1)  + value) / _nbValueSetted;
-
-    }).bind(this);
-  }
-  return StateValue;
-})
-.factory('AircraftService', function AircraftService (StateValue, DataConnection) {
+.factory('AircraftService', function AircraftService (SpeedValue, AltitudeValue, DataConnection) {
   var ConnectionProvider = DataConnection;
 	var AircraftServiceSingleton = {
-		speed: new StateValue(),
-		altitude: new StateValue(),
+		speed: SpeedValue,
+		altitude: AltitudeValue,
     landingGear: false,
     flaps: 0,
     connection: 'Disconnected',

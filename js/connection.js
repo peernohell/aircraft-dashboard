@@ -6,17 +6,13 @@ angular
    * initEvents must be call durring constructor of the super class
    */
   AbstractDataConnection = {
-    initEvents: function () {
-      ['airspeed', 'altitude', 'flaps', 'landinggear', 'connection']
-      .forEach(function (evt) {
-        this.events[evt] = [];
-      }.bind(AbstractDataConnection));
+    attachEvent: function (evt) {
+      this.events[evt] = [];
     },
-		events: function () {
-			[].forEach.call(arguments, function (evt) {
-				this.events[evt] = [];
-			}.bind(this));
-		},
+    initEvents: function () {
+      this.events = {};
+      ['airspeed', 'altitude', 'flaps', 'landinggear', 'connection'].forEach(this.attachEvent.bind(this));
+    },
 		sendEvents: function (evt) {
 			var args = [].slice.call(arguments, 1);
 			if (!(evt in this.events))

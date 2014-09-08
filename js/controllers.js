@@ -1,6 +1,6 @@
 angular
 .module('AircraftDashboard', [
-  'aircraft.factory'
+  'aircraft.factories'
 ])
 .config(['DataConnectionProvider', function (ConnectionProvider) {
   var config = {url: 'http://localhost:3000'};
